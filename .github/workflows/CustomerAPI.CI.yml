@@ -1,0 +1,49 @@
+on: [workflow_dispatch, push]
+name: CustomerAPI.CI
+
+jobs:
+  build-and-package:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@master
+
+    - name: Set up .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '5.0.302'
+        
+    - name: Build with dotnet
+      uses: Amadevus/pwsh-script@v2.0.1
+      id: dotnet-build
+      with:
+        script: dir "*.csproj" -Recurse | %{dotnet build  $PSItem.FullName}
+    - run: echo '${{ steps.dotnet-build.outputs.result }}'
+    
+    - name: Test with dotnet
+      uses: Amadevus/pwsh-script@v2.0.1
+      id: dotnet-test
+      with:
+        script: |
+                 dir "*.Tests.csproj" -Recurse | %{dotnet test  $PSItem.FullName --logger ("trx;LogFileName=" + ($PSItem.Name -replace ".csproj", ".trx")) /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --no-restore --no-build}
+                 dir "*.Tests.trx" -Recurse | %{ copy-item -Path $PSItem.FullName };
+    - run: echo '${{ steps.dotnet-test.outputs.result }}'
+    
+    - name: Upload Code Coverage
+      uses: codecov/codecov-action@v2
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
+        #files: ./coverage1.xml,./coverage2.xml # optional
+        #flags: unittests # optional
+        name: nla-customer-api # optional
+        #fail_ci_if_error: true # optional (default = false)
+        #verbose: true # optional (default = false)
+    
+    - name: Test Report
+      uses: dorny/test-reporter@v1
+      if: success() || failure()    # run this step even if previous step failed
+      with:
+        name: Cutomer API Tests            # Name of the check run which will be created
+        path: ./*.Tests.trx    # Path to test results
+        reporter: dotnet-trx        # Format of test results
+

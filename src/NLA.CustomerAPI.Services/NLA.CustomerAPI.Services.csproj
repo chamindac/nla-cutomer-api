@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NLA.CustomerAPI.Repositories\NLA.CustomerAPI.Repositories.csproj" />
+  </ItemGroup>
+</Project>
