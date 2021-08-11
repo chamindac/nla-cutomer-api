@@ -3,7 +3,7 @@ name: CustomerAPI.CI
 
 jobs:
   build-and-package:
-    runs-on: windows-latest
+    runs-on: linux-latest
 
     steps:
     - uses: actions/checkout@master
