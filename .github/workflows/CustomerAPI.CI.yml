@@ -46,4 +46,17 @@ jobs:
         name: Cutomer API Tests            # Name of the check run which will be created
         path: ./*.Tests.trx    # Path to test results
         reporter: dotnet-trx        # Format of test results
+    
+    - name: ACR build
+      id: acr
+      uses: ams0/acr-task-github-action@v1
+      with:
+        service_principal: ${{ secrets.service_principal }}
+        service_principal_password: ${{ secrets.service_principal_password }}
+        tenant: ${{ secrets.tenant }}
+        registry: ${{ secrets.acr }}
+        repository: ${{ secrets.acr_repo }}
+        image: customerapi
+        git_access_token: ${{ secrets.GITHUB_TOKEN }}
+        dockerfile: Dockerfile
 
