@@ -1,9 +1,16 @@
 on: [workflow_dispatch, push]
 name: CustomerAPI.CI
 
+
+  
 jobs:
   build-and-package:
     runs-on: ubuntu-latest
+    
+    env:
+      CLUSTER_RESOURCE_GROUP: "rg-ifsaks"
+      NAMESPACE: "dev"
+      APP_NAME: "customerapi"
 
     steps:
     - uses: actions/checkout@master
@@ -59,4 +66,17 @@ jobs:
         image: customerapi
         git_access_token: ${{ secrets.GITHUB_TOKEN }}
         dockerfile: Dockerfile
+    
+    - name: Set K8S Context
+      id: setcontext
+      uses: azure/k8s-set-context@v1
+      with:
+        method: kubeconfig
+        kubeconfig: ${{ secrets.K8S_CONFIG }}
+    
+    # Create namespace if doesn't exist
+    - name: Create K8s namespace
+      id: set-namespace
+      run: |
+            kubectl create namespace ${{ env.NAMESPACE }} --dry-run -o json | kubectl apply -f -
 
