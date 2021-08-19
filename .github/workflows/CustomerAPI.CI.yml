@@ -11,6 +11,7 @@ jobs:
       CLUSTER_RESOURCE_GROUP: "rg-ifsaks"
       NAMESPACE: "dev"
       APP_NAME: "customerapi"
+      IMAGE_SECRET: "customerapiimgsec"
 
     steps:
     - uses: actions/checkout@master
@@ -79,4 +80,15 @@ jobs:
       id: set-namespace
       run: |
             kubectl create namespace ${{ env.NAMESPACE }} --dry-run -o json | kubectl apply -f -
+    
+    # Create image pull secret for ACR
+    - name: ACR Image Pull Secret
+      uses: azure/k8s-create-secret@v1
+      with:
+        container-registry-url: ${{ env.acr }}
+        container-registry-username: ${{ secrets.service_principal }}
+        container-registry-password: ${{ secrets.service_principal_password }}
+        secret-name: ${{ env.IMAGE_SECRET }}
+        namespace: ${{ env.NAMESPACE }}
+        arguments: --force true
 
