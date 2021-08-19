@@ -65,6 +65,7 @@ jobs:
         registry: ${{ secrets.acr }}
         repository: ${{ secrets.acr_repo }}
         image: customerapi
+        tag: ${{ github.sha }}
         git_access_token: ${{ secrets.GITHUB_TOKEN }}
         dockerfile: Dockerfile
     
