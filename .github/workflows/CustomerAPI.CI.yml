@@ -92,4 +92,23 @@ jobs:
         secret-name: ${{ env.IMAGE_SECRET }}
         namespace: ${{ env.NAMESPACE }}
         arguments: --force true
+        
+    - name: Deploy ingress controller
+      uses: Azure/k8s-deploy@v1.4
+      with:
+        namespace: ingress-nginx
+        manifests: |
+            manifests/ingress-controller.yml
+        kubectl-version: 'latest'
+    
+    - name: Deploy customer api
+      uses: Azure/k8s-deploy@v1.4
+      with:
+        namespace: ${{ env.NAMESPACE }}
+        images: ${{ env.acr }}/${{ secrets.acr_repo }}/customerapi:${{ github.sha }}
+        manifests: |
+            manifests/deployment.yml
+            manifests/service.yml
+            manifests/ingress.yml
+        kubectl-version: 'latest'
 
