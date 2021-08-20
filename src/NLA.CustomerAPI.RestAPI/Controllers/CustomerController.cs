@@ -12,7 +12,7 @@ using System.Threading;
 namespace NLA.CustomerAPI.RestAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class CustomerController : ControllerBase
     {
         private readonly ILogger<CustomerController> _logger;

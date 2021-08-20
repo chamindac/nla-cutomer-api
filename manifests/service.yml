@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+apiVersion: v1
+metadata:
+  name: customerapi-service
+spec:
+  selector:
+    app: customerapi
+  type: LoadBalancer
+  ports:
+    - name: customerapi-port
+      port: 8080
+      targetPort: 80
