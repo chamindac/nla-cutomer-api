@@ -96,6 +96,7 @@ jobs:
     - name: Deploy ingress controller
       uses: Azure/k8s-deploy@v1.4
       with:
+        namespace: ingress-nginx
         manifests: |
             manifests/ingress-controller.yml
         kubectl-version: 'latest'
