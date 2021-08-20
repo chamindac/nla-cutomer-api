@@ -108,7 +108,5 @@ jobs:
         images: ${{ env.acr }}/${{ secrets.acr_repo }}/customerapi:${{ github.sha }}
         manifests: |
             manifests/deployment.yml
-            manifests/service.yml
-            manifests/ingress.yml
         kubectl-version: 'latest'
 
