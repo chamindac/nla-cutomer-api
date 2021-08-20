@@ -92,4 +92,12 @@ jobs:
         secret-name: ${{ env.IMAGE_SECRET }}
         namespace: ${{ env.NAMESPACE }}
         arguments: --force true
+        
+    - name: Deploy ingress controller
+      uses: Azure/k8s-deploy@v1.4
+      with:
+        namespace: ${{ env.NAMESPACE }}
+        manifests: |
+            manifests/ingress-controller.yml
+        kubectl-version: 'latest'
 
