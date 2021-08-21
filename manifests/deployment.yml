@@ -18,6 +18,6 @@ spec:
       - name: customerapi-container
         image: acrifsaks.azurecr.io/nla/customerapi:1.1
         ports:
-        - containerPort: 80
+        - containerPort: 3000
           protocol: TCP
           name: custapi-port
