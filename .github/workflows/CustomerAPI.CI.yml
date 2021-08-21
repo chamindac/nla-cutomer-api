@@ -103,10 +103,11 @@ jobs:
     
     - name: Deploy customer api
       uses: Azure/k8s-deploy@v1.4
-      timeout-minutes: 30
       with:
         namespace: ${{ env.NAMESPACE }}
-        images: ${{ env.acr }}/${{ secrets.acr_repo }}/customerapi:${{ github.sha }}
+        images: acrifsaks.azurecr.io/nla/customerapi:${{ github.sha }}
+        imagepullsecrets: |
+            ${{ env.IMAGE_SECRET }}
         manifests: |
             manifests/deployment.yml
         kubectl-version: 'latest'
