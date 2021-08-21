@@ -27,6 +27,18 @@ namespace NLA.CustomerAPI.RestAPI.Controllers
         }
 
         [HttpGet]
+        [Route("TestCall")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public ActionResult<Customer> GetTestCall()
+        {
+           return new Customer
+           {
+               FirstName = "chaminda"
+           };
+        }
+
+        [HttpGet]
         [Route("GetAll")]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]

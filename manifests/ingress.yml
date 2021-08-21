@@ -25,3 +25,10 @@ spec:
             name: customerapi-service
             port:
               number: 3000
+      - path: /api/Customer/TestCall
+        pathType: Exact
+        backend:
+          service:
+            name: customerapi-service
+            port:
+              number: 3000
