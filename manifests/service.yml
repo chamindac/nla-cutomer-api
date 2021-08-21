@@ -9,5 +9,5 @@ spec:
   ports:
     - protocol: TCP
       port: 80
-      targetPort: customerapi-port
+      targetPort: custapi-port
       nodePort: 30080
