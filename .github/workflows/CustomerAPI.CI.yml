@@ -105,7 +105,7 @@ jobs:
       uses: Azure/k8s-deploy@v1.4
       with:
         namespace: ${{ env.NAMESPACE }}
-        images: acrifsaks.azurecr.io/nla/customerapi:${{ github.sha }}
+        images: ${{ secrets.acr }}/${{ secrets.acr_repo }}/customerapi:${{ github.sha }}
         imagepullsecrets: |
             ${{ env.IMAGE_SECRET }}
         manifests: |
