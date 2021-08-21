@@ -62,8 +62,8 @@ jobs:
         service_principal: ${{ secrets.service_principal }}
         service_principal_password: ${{ secrets.service_principal_password }}
         tenant: ${{ secrets.tenant }}
-        registry: ${{ secrets.acr }}
-        repository: ${{ secrets.acr_repo }}
+        registry: acrifsaks.azurecr.io
+        repository: nla
         image: customerapi
         tag: ${{ github.sha }}
         git_access_token: ${{ secrets.GITHUB_TOKEN }}
@@ -105,7 +105,7 @@ jobs:
       uses: Azure/k8s-deploy@v1.4
       with:
         namespace: ${{ env.NAMESPACE }}
-        images: ${{ secrets.acr }}/${{ secrets.acr_repo }}/customerapi:${{ github.sha }}
+        images: acrifsaks.azurecr.io/nla/customerapi:${{ github.sha }}
         imagepullsecrets: |
             ${{ env.IMAGE_SECRET }}
         manifests: |
