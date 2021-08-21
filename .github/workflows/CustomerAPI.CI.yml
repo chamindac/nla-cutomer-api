@@ -118,5 +118,6 @@ jobs:
         namespace: ${{ env.NAMESPACE }}
         manifests: |
             manifests/service.yml
+            manifests/ingress.yml
         kubectl-version: 'latest'
 
