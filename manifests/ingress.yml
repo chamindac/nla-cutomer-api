@@ -17,11 +17,11 @@ spec:
           service:
             name: customerapi-service
             port:
-              number: 30080
+              number: 3000
       - path: /api/Customer/Register
         pathType: Exact
         backend:
           service:
             name: customerapi-service
             port:
-              number: 30080
+              number: 3000

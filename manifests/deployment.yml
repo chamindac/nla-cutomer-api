@@ -19,3 +19,5 @@ spec:
         image: acrifsaks.azurecr.io/nla/customerapi:1.1
         ports:
         - containerPort: 80
+          protocol: TCP
+          name: custapi-port
