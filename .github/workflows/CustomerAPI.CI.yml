@@ -111,4 +111,12 @@ jobs:
         manifests: |
             manifests/deployment.yml
         kubectl-version: 'latest'
+    
+    - name: Deploy customer api service
+      uses: Azure/k8s-deploy@v1.4
+      with:
+        namespace: ${{ env.NAMESPACE }}
+        manifests: |
+            manifests/service.yml
+        kubectl-version: 'latest'
 
