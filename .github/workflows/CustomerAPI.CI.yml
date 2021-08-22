@@ -113,13 +113,12 @@ jobs:
         kubectl-version: 'latest'
         arguments: --force true
     
-    # - name: Deploy customer api service
-    #   uses: Azure/k8s-deploy@v1.4
-    #   with:
-    #     namespace: ${{ env.NAMESPACE }}
-    #     manifests: |
-    #         manifests/service.yml
-    #         manifests/ingress.yml
-    #     kubectl-version: 'latest'
-    #     arguments: --force true
+    - name: Deploy customer api service
+      uses: Azure/k8s-deploy@v1.4
+      with:
+        namespace: ${{ env.NAMESPACE }}
+        manifests: |
+            manifests/service.yml
+        kubectl-version: 'latest'
+        arguments: --force true
 
