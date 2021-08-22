@@ -54,20 +54,29 @@ jobs:
         path: ./*.Tests.trx    # Path to test results
         reporter: dotnet-trx        # Format of test results
     
-    - name: ACR build
-      id: acr
-      uses: ams0/acr-task-github-action@v2
+    # - name: ACR build
+    #   id: acr
+    #   uses: ams0/acr-task-github-action@v2
+    #   with:
+    #     service_principal: ${{ secrets.service_principal }}
+    #     service_principal_password: ${{ secrets.service_principal_password }}
+    #     tenant: ${{ secrets.tenant }}
+    #     registry: acrch.azurecr.io
+    #     repository: nla
+    #     image: customerapi
+    #     tag: ${{ github.sha }}
+    #     git_access_token: ${{ secrets.GITHUB_TOKEN }}
+    #     dockerfile: Dockerfile
+
+    - name: Build and Push Codker Image
+      uses: Amadevus/pwsh-script@v2.0.1
+      id: docker-build
       with:
-        service_principal: ${{ secrets.service_principal }}
-        service_principal_password: ${{ secrets.service_principal_password }}
-        tenant: ${{ secrets.tenant }}
-        registry: acrch.azurecr.io
-        repository: nla
-        image: customerapi
-        tag: ${{ github.sha }}
-        git_access_token: ${{ secrets.GITHUB_TOKEN }}
-        dockerfile: Dockerfile
-        build_args: '[{"--no-cache":true}]'
+        script: |
+                 docker build --no-cache -t acrch.azurecr.io/nla/customerapi:${{ github.sha }} .
+                 docker login acrch.azurecr.io -u ${{ secrets.service_principal }} -p ${{ secrets.service_principal_password }}
+                 docker push acrch.azurecr.io/nla/customerapi:${{ github.sha }}
+    - run: echo '${{ steps.docker-build.outputs.result }}'
     
     - name: Set K8S Context
       id: setcontext
