@@ -1,12 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: customerapi-service
+  name: customerapi
+  labels:
+    app: customer-api
+    service: customerapi
 spec:
-  type: ClusterIP
-  selector:
-    app: customerapi
+  type: LoadBalancer
   ports:
-    - protocol: TCP
-      port: 3000
-      targetPort: custapi-port
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+  selector:
+    service: customerapi

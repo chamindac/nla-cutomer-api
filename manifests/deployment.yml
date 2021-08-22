@@ -1,23 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: customerapi-deployment
+  name: customerapi
+  labels:
+    app: customer-api
 spec:
+  replicas: 1
   selector:
     matchLabels:
-      app: customerapi
-      version: v1
-  replicas: 3
+      service: customerapi
   template:
     metadata:
       labels:
-        app: customerapi
-        version: v1
+        app: customer-api
+        service: customerapi
     spec:
       containers:
-      - name: customerapi-container
-        image: acrifsaks.azurecr.io/nla/customerapi:1.1
-        ports:
-        - containerPort: 3000
-          protocol: TCP
-          name: custapi-port
+        - name: customerapi
+          image: acrifsaks.azurecr.io/nla/customerapi:f5005b5ca6cecd92d4dfbc26f58d3d779de22abe
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          env:
+            - name: ASPNETCORE_URLS
+              value: http://+:80
