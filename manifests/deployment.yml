@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: customerapi
-          image: acrifsaks.azurecr.io/nla/customerapi:f5005b5ca6cecd92d4dfbc26f58d3d779de22abe
+          image: acrch.azurecr.io/nla/customerapi:f5005b5ca6cecd92d4dfbc26f58d3d779de22abe
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
