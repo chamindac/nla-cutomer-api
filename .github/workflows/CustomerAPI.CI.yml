@@ -67,7 +67,7 @@ jobs:
         tag: ${{ github.sha }}
         git_access_token: ${{ secrets.GITHUB_TOKEN }}
         dockerfile: Dockerfile
-        build_args: [{"--no-cache"}]
+        build_args: '[{"--no-cache"}]'
     
     - name: Set K8S Context
       id: setcontext
