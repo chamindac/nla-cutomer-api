@@ -9,7 +9,6 @@ jobs:
     
     env:
       CLUSTER_RESOURCE_GROUP: "rg-ifsaks"
-      NAMESPACE: "dev"
       APP_NAME: "customerapi"
       IMAGE_SECRET: "customerapiimgsec"
 
@@ -62,65 +61,65 @@ jobs:
         service_principal: ${{ secrets.service_principal }}
         service_principal_password: ${{ secrets.service_principal_password }}
         tenant: ${{ secrets.tenant }}
-        registry: acrifsaks.azurecr.io
+        registry: acrch.azurecr.io
         repository: nla
         image: customerapi
         tag: ${{ github.sha }}
         git_access_token: ${{ secrets.GITHUB_TOKEN }}
         dockerfile: Dockerfile
     
-    - name: Set K8S Context
-      id: setcontext
-      uses: azure/k8s-set-context@v1
-      with:
-        method: kubeconfig
-        kubeconfig: ${{ secrets.K8S_CONFIG }}
+    # - name: Set K8S Context
+    #   id: setcontext
+    #   uses: azure/k8s-set-context@v1
+    #   with:
+    #     method: kubeconfig
+    #     kubeconfig: ${{ secrets.K8S_CONFIG }}
     
-    # Create namespace if doesn't exist
-    - name: Create K8s namespace
-      id: set-namespace
-      run: |
-            kubectl create namespace ${{ env.NAMESPACE }} --dry-run -o json | kubectl apply -f -
+    # # Create namespace if doesn't exist
+    # - name: Create K8s namespace
+    #   id: set-namespace
+    #   run: |
+    #         kubectl create namespace ${{ env.NAMESPACE }} --dry-run -o json | kubectl apply -f -
     
-    # Create image pull secret for ACR
-    - name: ACR Image Pull Secret
-      uses: azure/k8s-create-secret@v1
-      with:
-        container-registry-url: ${{ env.acr }}
-        container-registry-username: ${{ secrets.service_principal }}
-        container-registry-password: ${{ secrets.service_principal_password }}
-        secret-name: ${{ env.IMAGE_SECRET }}
-        namespace: ${{ env.NAMESPACE }}
-        arguments: --force true
+    # # Create image pull secret for ACR
+    # - name: ACR Image Pull Secret
+    #   uses: azure/k8s-create-secret@v1
+    #   with:
+    #     container-registry-url: acrch.azurecr.io
+    #     container-registry-username: ${{ secrets.service_principal }}
+    #     container-registry-password: ${{ secrets.service_principal_password }}
+    #     secret-name: ${{ env.IMAGE_SECRET }}
+    #     namespace: ${{ env.NAMESPACE }}
+    #     arguments: --force true
         
-    - name: Deploy ingress controller
-      uses: Azure/k8s-deploy@v1.4
-      with:
-        namespace: ingress-nginx
-        manifests: |
-            manifests/ingress-controller.yml
-        kubectl-version: 'latest'
-        arguments: --force true
+    # - name: Deploy ingress controller
+    #   uses: Azure/k8s-deploy@v1.4
+    #   with:
+    #     namespace: ingress-nginx
+    #     manifests: |
+    #         manifests/ingress-controller.yml
+    #     kubectl-version: 'latest'
+    #     arguments: --force true
     
-    - name: Deploy customer api
-      uses: Azure/k8s-deploy@v1.4
-      with:
-        namespace: ${{ env.NAMESPACE }}
-        images: acrifsaks.azurecr.io/nla/customerapi:${{ github.sha }}
-        imagepullsecrets: |
-            ${{ env.IMAGE_SECRET }}
-        manifests: |
-            manifests/deployment.yml
-        kubectl-version: 'latest'
-        arguments: --force true
+    # - name: Deploy customer api
+    #   uses: Azure/k8s-deploy@v1.4
+    #   with:
+    #     namespace: ${{ env.NAMESPACE }}
+    #     images: acrifsaks.azurecr.io/nla/customerapi:${{ github.sha }}
+    #     imagepullsecrets: |
+    #         ${{ env.IMAGE_SECRET }}
+    #     manifests: |
+    #         manifests/deployment.yml
+    #     kubectl-version: 'latest'
+    #     arguments: --force true
     
-    - name: Deploy customer api service
-      uses: Azure/k8s-deploy@v1.4
-      with:
-        namespace: ${{ env.NAMESPACE }}
-        manifests: |
-            manifests/service.yml
-            manifests/ingress.yml
-        kubectl-version: 'latest'
-        arguments: --force true
+    # - name: Deploy customer api service
+    #   uses: Azure/k8s-deploy@v1.4
+    #   with:
+    #     namespace: ${{ env.NAMESPACE }}
+    #     manifests: |
+    #         manifests/service.yml
+    #         manifests/ingress.yml
+    #     kubectl-version: 'latest'
+    #     arguments: --force true
 
