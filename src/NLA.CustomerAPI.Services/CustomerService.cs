@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using NLA.CustomerAPI.Domains;
+using NLA.CustomerAPI.Services.Clients;
 using NLA.CustomerAPI.Repositories.Interfaces;
 
 namespace NLA.CustomerAPI.Services
@@ -10,14 +11,17 @@ namespace NLA.CustomerAPI.Services
     public class CustomerService : ICustomerService
     {
         private readonly ICustomerRepository _customerRepository;
+        private readonly INotificationApiClient _notificationApiClient;
         // TODO: Implementa validators
         //private readonly IValidator<Customer> _customerValidator;
 
         public CustomerService(ICustomerRepository customerRepository
+            ,INotificationApiClient notificationApiClient
             //,IValidator<Customer> customerValidator
             )
         {
             _customerRepository = customerRepository;
+            _notificationApiClient = notificationApiClient;
             //_customerValidator = customerValidator;
         }
 
@@ -34,6 +38,7 @@ namespace NLA.CustomerAPI.Services
             var registeredCustomer = await _customerRepository.RegisterCutomer(customer);
 
             //TODO: Call notification - Send message to Q
+            await _notificationApiClient.SendCustomerRegistrationEmail(registeredCustomer, cancellationToken);
 
             return registeredCustomer;
         }

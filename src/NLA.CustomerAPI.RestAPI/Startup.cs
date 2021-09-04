@@ -16,8 +16,10 @@ using NLA.CustomerAPI.Repositories;
 using NLA.CustomerAPI.Repositories.Data;
 using NLA.CustomerAPI.Repositories.Interfaces;
 using NLA.CustomerAPI.Services;
+using NLA.CustomerAPI.Services.Clients;
 using NLA.CustomerAPI.Apis.Extensions;
 using NLA.CustomerAPI.RestApi.Mapping;
+using NLA.CustomerAPI.RestAPI.Configurations;
 
 namespace NLA.CustomerAPI.RestAPI
 {
@@ -33,6 +35,17 @@ namespace NLA.CustomerAPI.RestAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            var apiSettings = new ApiSettings();
+            Configuration.GetSection("ApiSettings").Bind(apiSettings);
+            services.AddOptions();
+            services.Configure<ApiSettings>(Configuration.GetSection("ApiSettings"));
+
+            services.AddHttpClient<INotificationApiClient, NotificationApiClient>(client =>
+            {
+                client.BaseAddress = new Uri(apiSettings.NotificationApiUrl);
+            });
+
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
 
