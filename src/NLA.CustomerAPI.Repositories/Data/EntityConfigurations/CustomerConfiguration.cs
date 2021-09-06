@@ -10,9 +10,6 @@ namespace NLA.CustomerAPI.Repositories.Data.EntityConfigurations
         {
             builder.ToTable(nameof(Customer));
             
-            builder.HasIndex(c => new { c.TaxStartDate })
-                .IsUnique();
-                
             builder.HasIndex(c => new { c.Code })
                 .IsUnique();
 }
